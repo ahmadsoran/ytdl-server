@@ -30,18 +30,18 @@ const DownloadVideo = async (req, res) => {
         // Example of downloading a video.
         ytdl.downloadFromInfo(info, {
             format: format
-        }).on('error', (err) => { return res.send(err) }).pipe(fs.createWriteStream(`../../${info.videoDetails?.videoId}`)).on('finish', (err) => {
+        }).on('error', (err) => { return res.send(err) }).pipe(fs.createWriteStream(`${info.videoDetails?.videoId}`)).on('finish', (err) => {
             if (err) {
                 return res.status(400).json(err.message)
             }
-            res.download(`../../${info.videoDetails.videoId}`);
+            res.download(`${info.videoDetails.videoId}`);
             const responsed = res.status(200).json({
                 message: 'Video Downloaded'
             })
             console.log('downloaded')
             if (responsed) {
                 setTimeout(() => {
-                    fs.unlink(`../../${info.videoDetails.videoId}`, (err) => {
+                    fs.unlink(`${info.videoDetails.videoId}`, (err) => {
                         if (err) {
                             console.log(err)
                         }
