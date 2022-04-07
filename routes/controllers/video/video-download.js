@@ -5,7 +5,11 @@ import VideoUrlValidation from './videoValidation.js';
 const DownloadVideo = async (req, res) => {
     const { url, quality } = req.body;
     console.log(req.body);
+    let info = await ytdl.getInfo(url);
+    let format = ytdl.chooseFormat(info.formats, {
+        quality: quality,
 
+    });
     try {
         try {
 
@@ -15,28 +19,41 @@ const DownloadVideo = async (req, res) => {
 
         }
         // Example of choosing a video format.
-        let info = await ytdl.getInfo(url);
-        let format = ytdl.chooseFormat(info.formats, {
-            quality: quality,
 
-        });
 
         // Example of downloading a video.
         ytdl.downloadFromInfo(info, {
             format: format
-        }).pipe(fs.createWriteStream(`${info.videoDetails?.videoId}`)).on('finish', (err) => {
+        }).pipe(fs.createWriteStream(`./assets/downloads/${info.videoDetails?.videoId}`)).on('finish', (err) => {
             if (err) {
                 return res.status(400).json(err.message)
             }
-            res.download(`${info.videoDetails.videoId}`);
+            res.download(`./assets/downloads/${info.videoDetails.videoId}`);
+            const responsed = res.status(200).json({
+                message: 'Video Downloaded'
+            })
             console.log('downloaded')
+            if (responsed) {
+                setTimeout(() => {
+                    fs.unlink(`./assets/downloads/${info.videoDetails.videoId}`, (err) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                    })
+                    console.log('deleted')
+                }, 5000)
+
+
+            }
+
         })
 
 
 
     } catch (error) {
-        return console.log(error);
+        return res.status(400).json(error.message);
     }
+
 
 }
 
