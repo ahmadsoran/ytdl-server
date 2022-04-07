@@ -5,7 +5,9 @@ import VideoUrlValidation from './videoValidation.js';
 const DownloadVideo = async (req, res) => {
     const { url, quality } = req.body;
 
-    console.log({ url, quality });
+
+
+    console.log(req.headers['Content-Length']);
 
 
     try {
@@ -19,14 +21,23 @@ const DownloadVideo = async (req, res) => {
         }
         let info = await ytdl.getInfo(url);
         let format = ytdl.chooseFormat(info.formats, {
-
             quality: quality,
+            filter: (format) => {
+                return format.contentLength > 0
+            }
 
         });
         // Example of choosing a video format.
 
         console.log({ url, quality });
-        res.header('Content-Length', format.contentLength);
+        console.log(format?.contentLength);
+        if (format?.contentLength > 0) {
+            res.setHeader('Content-Length', format?.contentLength);
+
+        } else {
+            res.setHeader('Content-Length', 50000);
+
+        }
 
         // Example of downloading a video.
         ytdl.downloadFromInfo(info, {
@@ -60,6 +71,7 @@ const getVideoInfo = async (req, res) => {
                 videoChannelSub: info.videoDetails?.author?.subscriber_count,
                 videoViewers: info.videoDetails?.viewCount,
                 videoId: info.videoDetails?.videoId,
+                formatContentLength: info.formats[0].contentLength,
 
                 videoQuality: info.formats?.map((data) => {
                     return {
