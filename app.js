@@ -29,7 +29,7 @@ mongoose.connect(DBURL, {
 });
 const accessLogStream = fs.WriteStream('./access.log', { flags: 'a' })
 app.use(cors({
-    origin: ['https://ytdll.netlify.app'],
+    origin: ['https://ytdll.netlify.app', 'http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204
