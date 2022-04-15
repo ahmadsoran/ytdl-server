@@ -28,3 +28,5 @@
 ::1 - - [07/Apr/2022:16:37:15 +0000] "GET /download[object%20Blob] HTTP/1.1" 404 162 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
 ::1 - - [07/Apr/2022:16:55:41 +0000] "GET /download HTTP/1.1" 404 147 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
 ::1 - - [07/Apr/2022:17:01:19 +0000] "GET /download HTTP/1.1" 404 147 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
+::ffff:127.0.0.1 - - [09/Apr/2022:22:07:31 +0000] "GET /getUserData HTTP/1.1" 404 150 "-" "Thunder Client (https://www.thunderclient.com)"
+::ffff:127.0.0.1 - - [12/Apr/2022:00:24:19 +0000] "GET /downloadsData HTTP/1.1" 404 152 "-" "Thunder Client (https://www.thunderclient.com)"

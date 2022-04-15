@@ -5,6 +5,7 @@ import cors from 'cors'
 import Route from './routes/routes.js'
 import morgan from 'morgan'
 import fs from 'fs'
+import cloudinary from 'cloudinary'
 dotenv.config('dotenv')
 
 const ENV = process.env
@@ -14,7 +15,8 @@ mongoose.Promise = global.Promise;
 
 // ENV.DB_URL
 // ENV.TESTDB
-const DBURL = ENV.DB_URL
+// const DBURL = ENV.DB_URL
+const DBURL = ENV.TESTDB
 // Connect MongoDB at default port 27017. 
 mongoose.connect(DBURL, {
     useNewUrlParser: true,
@@ -36,6 +38,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(Route)
+cloudinary.config({
+    cloud_name: ENV.CLD_API_KEY_NAME,
+    api_key: ENV.CLD_API_KEY,
+    api_secret: ENV.CLD_API_KEY_SEC
+});
 app.use(morgan('combined', { stream: accessLogStream }))
 app.listen(ENV.PORT, () => {
     console.log('server online in http://localhost:' + ENV.PORT)

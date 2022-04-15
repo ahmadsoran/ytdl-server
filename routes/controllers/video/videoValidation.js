@@ -1,8 +1,8 @@
 import joi from 'joi';
 
 const VideoUrlValidation = joi.object({
-    url: joi.string().uri().min(10).required(),
-    quality: joi.number().min(1).required()
+    url: joi.string().required().trim().replace(/\s/g, ''),
+    quality: joi.string().min(1).required()
 
 
 })

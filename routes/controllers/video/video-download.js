@@ -5,6 +5,7 @@ import VideoUrlValidation from './videoValidation.js';
 const DownloadVideo = async (req, res) => {
     const { url, quality } = req.body;
 
+    console.log({ url, quality });
 
 
     console.log(req.headers['Content-Length']);
@@ -16,12 +17,13 @@ const DownloadVideo = async (req, res) => {
             await VideoUrlValidation.validateAsync({ url, quality })
         } catch (error) {
             console.log(error.message);
-            return res.status(400).json(error.message)
+            return res.status(400).json({ error: error.message })
 
         }
-        let info = await ytdl.getInfo(url);
+        let info = await ytdl.getInfo(url)
         let format = ytdl.chooseFormat(info.formats, {
             quality: quality,
+
             filter: (format) => {
                 return format.contentLength > 0
             }
@@ -42,7 +44,7 @@ const DownloadVideo = async (req, res) => {
         // Example of downloading a video.
         ytdl.downloadFromInfo(info, {
             format: format
-        }).pipe(res).on('error', (err) => { return res.send(err) })
+        }).pipe(res).on('error', (err) => { return res.json({ error: err.message }) })
 
 
 
@@ -51,7 +53,7 @@ const DownloadVideo = async (req, res) => {
     catch (error) {
         console.log(error.message);
 
-        return res.status(400).json(error.message);
+        return res.status(400).json({ error: error.message });
     }
 
 
@@ -72,16 +74,16 @@ const getVideoInfo = async (req, res) => {
                 videoViewers: info.videoDetails?.viewCount,
                 videoId: info.videoDetails?.videoId,
                 formatContentLength: info.formats[0].contentLength,
-
                 videoQuality: info.formats?.map((data) => {
                     return {
                         qualityLabel: data?.qualityLabel,
                         itag: data?.itag,
                         hasAudio: data?.hasAudio,
                         audioQuality: data?.audioQuality,
+                        videoSizes: data?.contentLength,
                     }
                 }).filter((data) => {
-                    return data.qualityLabel !== 'tiny'
+                    return data.qualityLabel !== ''
                 }),
                 // videoQualitytest: info.formats,
                 videoThumbnail: info.videoDetails?.thumbnails.map((thumbnail) => {
@@ -97,10 +99,10 @@ const getVideoInfo = async (req, res) => {
             })
 
         }).catch(error => {
-            res.status(400).json(error.message)
+            res.status(400).json({ error: error.message })
         })
     } catch (error) {
-        return res.status(400).json(error.message)
+        return res.status(400).json({ error: error.message })
 
 
     }

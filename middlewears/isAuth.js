@@ -1,12 +1,25 @@
 import jwt from 'jsonwebtoken'
+import User from '../model/UserSchema.js';
 const isAuth = async (req, res, next) => {
 
   const getToken = req.headers.authorization
   try {
-    const user = jwt.verify(getToken, process.env.PRV_KEY);
-    req.user = user;
-    console.log('auted');
-    return next();
+    jwt.verify(getToken, process.env.PRV_KEY , async (err , decoded) => {
+      if (err) {
+        return res.status(400).json({ error: "invalid token" })
+      }
+     const findUser = await User.findById(decoded.id).exec()
+      if (!findUser) {
+        return res.status(400).json({ error: "User not found" })
+      
+      } else{
+        console.log('user found authed')
+        return next();
+      }
+     
+    });
+    
+    
   } catch (err) {
     console.log(err.message);
     return res.status(401).json(err.message);

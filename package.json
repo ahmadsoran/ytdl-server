@@ -7,6 +7,8 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.29.0",
     "cookie": "^0.4.2",
     "cors": "^2.8.5",
     "debug": "~4.3.4",
