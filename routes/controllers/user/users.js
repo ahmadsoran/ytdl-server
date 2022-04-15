@@ -32,7 +32,11 @@ const userRegister = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        return res.status(400).json({ error: error.message });
+        if (error.message.includes("duplicate key error")) {
+            return res.status(400).json({ error: 'username allready exists' });
+        } else {
+            return res.status(400).json({ error: error.message });
+        }
 
     }
 
