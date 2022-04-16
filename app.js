@@ -45,6 +45,6 @@ cloudinary.config({
 });
 app.use(morgan('combined', { stream: accessLogStream }))
 app.listen(ENV.PORT, () => {
-    console.log('server online in http://localhost:' + ENV.PORT)
+    console.log(`server online in port:` + ENV.PORT)
 })
 
