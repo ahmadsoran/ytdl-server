@@ -6,7 +6,8 @@ const userDownloads = async (req, res) => {
     const userId = req.headers.authorization;
     const { videoUrl, thumbnail, title } = req.body
     console.log(userId)
-    try {
+
+    if (userId) {
         jwt.verify(userId, process.env.PRV_KEY, async (err, decoded) => {
             if (err) {
                 return res.status(400).json({ error: "invalid token" })
@@ -31,8 +32,8 @@ const userDownloads = async (req, res) => {
             return res.status(200).json({ message: "Download saved" })
 
         })
-    } catch (error) {
-        res.status(400).json({ message: error.message })
+
+
     }
 }
 

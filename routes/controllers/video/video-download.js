@@ -1,5 +1,4 @@
 import ytdl from 'ytdl-core';
-import fs from 'fs';
 import VideoUrlValidation from './videoValidation.js';
 
 const DownloadVideo = async (req, res) => {
@@ -71,14 +70,15 @@ const getVideoInfo = async (req, res) => {
                 videoChannel: info.videoDetails?.author?.name,
                 videoChannelImg: info.videoDetails?.author?.thumbnails[0].url,
                 videoChannelSub: info.videoDetails?.author?.subscriber_count,
+                //simple text videws
                 videoViewers: info.videoDetails?.viewCount,
                 videoId: info.videoDetails?.videoId,
+                videoFilePath: info,
                 formatContentLength: info.formats[0].contentLength,
                 videoQuality: info.formats?.map((data) => {
                     return {
                         qualityLabel: data?.qualityLabel,
                         itag: data?.itag,
-                        hasAudio: data?.hasAudio,
                         audioQuality: data?.audioQuality,
                         videoSizes: data?.contentLength,
                     }
